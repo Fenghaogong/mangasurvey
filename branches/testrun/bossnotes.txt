@@ -1,0 +1,18 @@
+BOSS pipeline runs the base-level reductions through spreduce2d.pro, which calls spreduce.pro,
+and uses the spPlan2d*.par parameter file to do the reductions.
+
+Then BOSS runs spcombine_v5.pro with the spPlancomb*.par file to combine all of 
+the images from the different cameras.
+
+Key lines for flux calibration are line 254-270 in spcombine_v5.pro.  This splits things up
+into i1 (b1 and r1) and i2 (b2 and r2) and runs them through spflux_v5.
+
+Since we've only got spec 1, then I can ignore the i2 call.
+
+----------
+
+One major different will be in the use of plugmaps.  BOSS uses plPlugMapP (planned) and
+plPlugMapM (mapped), I think, whereas I'm putting my information in a slitmap *.slm file.
+The automapper will produce a plPlugMapM file for MaNGA that the first part of the pipeline
+will use.  I will need to write software to convert this plug map to a slitmap file
+for the manga3d phase.

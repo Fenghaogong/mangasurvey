@@ -1,0 +1,96 @@
+= Quick Look Inspection of MaNGA Reductions =
+
+manga_quicklook is designed to allow inspection of spectra from individual fibers based on either SOS or full-pipeline reductions.  The program is located on the as3 svn at manga/manga3d/trunk/pro/vis/manga_quicklook.pro
+
+----
+
+= Basic installation of the MaNGA SVN code:=
+
+  1) Get set up with an SVN account as per https://howdy.physics.nyu.edu/projects/as3/wiki/Software/SVNTutorial
+
+  2) IDL and the IDL astronomy user's library (http://idlastro.gsfc.nasa.gov/)
+     must both be installed on your machine.
+     Program has been tested using IDL 7.0.4 on a 64-bit Darwin Mac
+
+  3) Set the environment variable MANGAROOT in your .cshrc (or equivalent) file
+     to point to where your svn respository will be installed.
+     The IDL code frequently looks for reference files at specific
+     places in the MANGAROOT directory tree, and this variable tells it how to get
+     there.  For me, I use the line:
+     setenv MANGAROOT /manga
+
+  4) Obtain the latest copy of products from the svn repository.
+     You will need the products
+         as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk/
+         as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk/
+
+     Check these out using the commands (note detailed paths DO matter):
+     cd $MANGAROOT
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk manga3d/trunk
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk mangadb
+
+     You will also need the idlutils products from the SDSS3 SVN
+     This can be obtained publicly by
+         svn co http://www.sdss3.org/svn/repo/idlutils/trunk/ idlutils
+
+  5) Set the environment variable MANGAVER.  This controls versioning
+     of the MaNGA software for later reference, ensuring during deployment phase
+     that you always run the same version of software unless deliberately updating.
+     At the moment use
+     setenv MANGAVER trunk
+
+  6) In your .cshrc file (or the equivalent) add the manga directory tree to
+     your IDL path.  IDL should be capable of descending into subdirectories
+     when compiling code.  This should use the environment variables set above.
+     For instance, I use
+     setenv IDL_PATH ${IDL_PATH}:+$MANGAROOT/manga3d/$MANGAVER/
+     Make sure that idlutils in on your IDL path as well.
+
+-------
+
+= Starting manga_quicklook =
+
+Start IDL in any directory and type manga_quicklook
+
+It will open a dialog window to select the input spectrum file.  This should either be the SOS file starting with 'sci-' or the full pipeline file starting with 'spFrame'.
+In order to function properly, this code relies upon finding appropriate bundle maps describing the locations of individual fibers within bundles, and finding the slitmap describing what is plugged where along the slit and where it maps to on the plate.  The paths to the former is specified relative to MANGAROOT, the code searches for the latter in the reduced data directory.
+
+------
+
+= Running manga_quicklook =
+
+An example of it running is in manga_quicklook.png below.  The idea is that while we're on the mountain (or afterwards, if we want to explore the reduced data) we can point and click on different kinds of fibers over the plate and see what their spectra look like.  If you click on an IFU, it pulls up a map of the IFU to select a fiber from.  The spectrum itself can be zoomed, rescaled, standard stuff (? gives interface commands):
+Display Commands
+     left click : Set x range
+    right click : Set y range
+   center click : Set x and y ranges
+              [ : Pan left
+              ] : Pan right
+              p : Pan to the cursor position
+              i : Zoom in
+              o : Zoom out
+              w : Display whole order
+            0-9 : Bin spectrum
+              h : Plot in histogram mode (toggle)
+              s : Print cursor wavelength
+
+Blue spectra are shown by default, red spectra can be toggled using the button in the main window.
+
+[[Image(manga_quicklook.png, 1200px)]]
+
+------
+
+= Revision history =
+
+;   v1.0: 19-Dec-2012  D. Law
+;       First written; spectrum display interaction based on
+;       continuum-fitting code by George Becker.
+;   v1.1: 28-Dec-2012 D. Law
+;       Fixed mouse click location errors with some window sizes.
+;       Auto-fits windows to screen real estate.
+;       Keep same spectrum range for new spectra.
+;   v1.2: 09-Jan-2013 D. Law
+;       Auto-finds wset and slitmap files, handles reading spectra
+;       with new slitmap files.  Handles full and SOS pipeline data.
+;   v1.3: 16-Jan-2013 D. Law
+;       Modified for new directory structure
