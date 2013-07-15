@@ -1,0 +1,147 @@
+# Sample MaNGA simulated observing (.sob) file
+# Note that EXACT line format, spacing, etc in this file are important
+
+# Parameters governing the simulator.
+# *You probably shouldn't change these unless you know exactly what you're doing.*
+0.1        Working grid scale for calculations (arcsec)
+0.5        Final grid scale for reconstruction (arcsec)
+1.20       Working box size for simulation (fraction of bundle diameter)
+3 	   ndither (this is hard coded in many places, DO NOT change)
+1.0        ditherfrac (fraction of optimal distance moved during dithering)
+-1         Seed for random number generator (-1 uses system clock)
+0.0        Crosstalk percentage (Currently not implemented)
+5500.      Guide wavelength in Angstroms
+10.5       Outside temperature in degrees C
+24.5       Relative humidity in percent
+730.0      Atmospheric pressure in mbar
+
+# Parameters governing the target, bundle, and basic observing setup
+# Allows three dead fibers to be specified (e.g., 27), -1 ignores.
+# Fiber bundle type should be 7, 19, 37, 61, 91, 127, 169, or -1
+91	   Fiber bundle type (number of fibers, or -1 to use specific as-built fiber bundle)
+56280/v1.1/ma008_bmp_v1.1.par Input file describing fiber bundle.  Only relevant if -1 chosen for fiber bundle type
+15:00:00.0   Target declination (degrees:arcmin:arcsec)
+0.0        Known XY error in bundle position (arcsec).  Actual error for each exposure drawn from Gaussian with this sigma.
+0.0        Unknown XY error in bundle position (arcsec).  Actual error for each exposure drawn from Gaussian with this sigma.
+-1    First allowable dead fiber
+-1    Second allowable dead fiber
+-1    Third allowable dead fiber
+
+# Parameters governing the individual observations.  Simulator supports up to 5 nights of observations
+# of any target, modify each one below as desired.  If nnights == 1, only Night 1 values will be used.
+# If nnights == 3, values for Nights 1, 2, and 3 will be used, etc.
+# In the sample file sample.sobs, the hour angle of observations is changed slightly between nights to
+# mimic real differences from night to night.
+1	   nnights: number of nights to observe.  MINIMUM value is 1, MAXIMUM value is 5.
+0          nbad: Number of bad exposures during observing (must BOTH specify here, and indicate which below)
+
+################################
+# Night 1 details
+0.         Position angle of bundle for the night
+# First exposure
+0          Quality (0=good, 1=bad/ignore)
+1	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+01:25:00   Hour angle at midpoint (hours:minutes:seconds)
+# Second exposure
+0          Quality (0=good, 1=bad/ignore)
+2	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+02:00:00   Hour angle at midpoint (hours:minutes:seconds)
+# Third exposure
+0          Quality (0=good, 1=bad/ignore)
+3	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+02:35:00   Hour angle at midpoint (hours:minutes:seconds)
+
+################################
+# Night 2 details.
+0.         Position angle of bundle for the night
+# First exposure
+0          Quality (0=good, 1=bad/ignore)
+1	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+01:00:00   Hour angle at midpoint (hours:minutes:seconds)
+# Second exposure
+0          Quality (0=good, 1=bad/ignore)
+2	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+01:30:00   Hour angle at midpoint (hours:minutes:seconds)
+# Third exposure
+0          Quality (0=good, 1=bad/ignore)
+3	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+02:00:00   Hour angle at midpoint (hours:minutes:seconds)
+
+################################
+# Night 3 details.
+0.         Position angle of bundle for the night
+# First exposure
+0          Quality (0=good, 1=bad/ignore)
+1	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+01:00:00   Hour angle at midpoint (hours:minutes:seconds)
+# Second exposure
+0          Quality (0=good, 1=bad/ignore)
+2	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+01:30:00   Hour angle at midpoint (hours:minutes:seconds)
+# Third exposure
+0          Quality (0=good, 1=bad/ignore)
+3	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+02:00:00   Hour angle at midpoint (hours:minutes:seconds)
+
+################################
+# Night 4 details.
+0.         Position angle of bundle for the night
+# First exposure
+0          Quality (0=good, 1=bad/ignore)
+1	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+01:00:00   Hour angle at midpoint (hours:minutes:seconds)
+# Second exposure
+0          Quality (0=good, 1=bad/ignore)
+2	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+01:30:00   Hour angle at midpoint (hours:minutes:seconds)
+# Third exposure
+0          Quality (0=good, 1=bad/ignore)
+3	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+02:00:00   Hour angle at midpoint (hours:minutes:seconds)
+
+################################
+# Night 5 details.
+0.         Position angle of bundle for the night
+# First exposure
+0          Quality (0=good, 1=bad/ignore)
+1	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+01:00:00   Hour angle at midpoint (hours:minutes:seconds)
+# Second exposure
+0          Quality (0=good, 1=bad/ignore)
+2	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+01:30:00   Hour angle at midpoint (hours:minutes:seconds)
+# Third exposure
+0          Quality (0=good, 1=bad/ignore)
+3	   Dither position (must be 1, 2, or 3)
+1.5	   Seeing (arcsec, at 5500 Ang)
+20.	   Length (minutes)
+02:00:00   Hour angle at midpoint (hours:minutes:seconds)
+

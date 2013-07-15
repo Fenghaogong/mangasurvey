@@ -1,0 +1,5 @@
+manga3d is the 3d component of the MaNGA pipeline.  It takes RSS from the BOSS pipeline and turns them into data cubes.
+
+Directories within this product:
+
+pro: IDL programs

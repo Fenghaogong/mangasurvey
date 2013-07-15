@@ -1,0 +1,30 @@
+MaNGA 3d pipeline tagged versions:
+
+v0_1: Tagged Feb 1 2013.  First tagged version for test-run.
+      Major issues with flux calibration, sky subtraction, but functional.
+v0_2: Tagged Feb 19 2013.  Tagged version for test-run data that fixes
+      some major issues with flux calibration and has taken input files
+      from BOSS-phase pipeline with better sky subtraction.  Flatfield
+      adjustments incorporated so that 3'' and 5'' fibers should have fluxes
+      for flat sources such as lamps and sky higher than 2'' fibers by 
+      geometrical area.
+v0_3: Tagged Apr 03 2013.  
+      WARNING- buggy tag, ivar problem fixed in v0_4.
+v0_4: Tagged Apr 03 2013.
+      WARNING- buggy tag, low number of good fiber ivar values
+      at extreme wavelengths, fixed in v0_5.
+v0_5: Tagged Apr 03 2013.  Tagged version for CDR-prep based on test run
+      data.  Fixes major issues with inverse variance channel combination
+      in 3D data cube combination.  Includes S/N estimates for individual
+      fibers as precursor to quality checks.
+v0_6: Tagged Jun 25 2013.
+  - Usage of proper guiding scale/rot estimates in manga3d
+  - Addition of /flatsky option to 3d sim code.
+  - Added code to calculate HA limit for a given decl.
+  - Added use of old flux cal vectors to plate with no cal stars.
+  - Added use of edge fibers for sky subtraction, and for 2nd pass sky sub.
+  - Added routines to calculate omega for specified observations
+  - Heavy modification of sky subtraction routines to implement
+    multiple-passes, write plots to a file.
+  - Modification of flux cal routines to write plots to a file,
+    calculate output in AB mags in an extension.

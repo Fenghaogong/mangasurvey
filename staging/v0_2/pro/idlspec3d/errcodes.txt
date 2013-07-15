@@ -1,0 +1,62 @@
+# Reference file listing error codes
+0: Normal status
+-2: Error in yanny_read
+-3: Error in yanny_read
+
+# BM file errors
+-10: Could not find bm file
+-11: yanny_readone failed to read bm file
+-12: Incorrect number of fibers in metrology file, or bad name
+-13: Bad fnum value in metrology file
+-15: Bad gbu flag in metrology file
+-16: Bad x,y position in metrology file
+-17: User flagged bundle map as bad based on visual inspection
+
+# SLM file errors
+-20: Could not find slitmap file
+-21: yanny_readone failed to read BLOCKS from slitmap file
+-22: yanny_readone failed to read SMAP from slitmap file
+-23: Incorrect number of fibers in a SLM block
+-24: Fiber number on slit is non-unique or weird
+-25: Non-unique or weird fnum in an IFU
+-26: Bad plugstatus value in slitmap
+
+# EXP file errors
+-30: Could not find frames for exp file
+-31: yanny_readone failed to read OPARAM from .exp file
+-32: yanny_readone failed to read BUNDLES from .exp file
+-33: ifuname chosen in .rdx file doesn't exist in .exp file
+-34: More than one entry for OPARM in .exp file
+-35: Invalid dither position specified in .exp file
+-36: Cannot find plugmap to construct exp file
+
+# RDX file errors
+-40: Could not find reduction setup file
+-41: yanny_readone failed to read REDUX from .rdx file
+-42: ifuname chosen in m3dplan doesn't exist
+
+# Target matching errors
+-51: Object RA does not match between exposures
+-52: Object DEC does not match between exposures
+
+# Drill file errors
+-60: Could not find appropriate plDrillPos file
+-61: Could not find appropriate drill CMM file
+-62: One or more holes over 60 microns from intended position, probable errors
+-63: Formatting problem in lead lines for drill CMM file
+
+# SetWcalib errors
+-120: Could not find wavelength calibration file calibmatrix.fits
+
+# Spectra import errors (sos)
+-130: Could not find expected number of fibers in slitmap for given IFU
+-131: Could not find wset file
+
+# Full spectra import and flux calibration errors
+-140: Could not find any calibration stars in slitmap
+-141: No good fluxing stars
+-142: No good spectrophot stars
+-143: Missing b or r camera to combine
+
+# Sky subtraction error
+-200: Sky subtraction fail

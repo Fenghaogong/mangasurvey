@@ -1,0 +1,18 @@
+This directory contains the code for the MaNGA data simulator.
+There are a variety of flavors:
+
+2d: Image simulator (manga_simimage.pro)
+    This program simulates observation of a simple 2d image
+    Purpose is to understand the effect of various observing strategies
+    on image quality.  This does not account for any noise sources.
+
+3d: Data cube simulator (manga_simcube.pro)
+    This program simulates observation of a 3d data cube
+    Input is a flux calibrated data cube with a corresponding wavelength
+    vector, output is a flux calibrated 'as observed' data cube in a given
+    wavelength range mimicing what would be produced by the MaNGA pipeline.
+
+calib: Calibration files for BOSS detector characteristics
+
+ccd: CCD-level data simulator
+    Produces mock ccd images from a set of input spectra

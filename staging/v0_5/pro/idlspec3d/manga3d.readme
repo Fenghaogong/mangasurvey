@@ -1,0 +1,39 @@
+MaNGA data cube reduction pipeline (manga3d.pro) README file
+
+Purpose:
+  Program takes the output from BOSS style spec2d reductions and turns
+  it into a calibrated data cube.
+
+Installation:
+  1) Obtain the /manga/manga3d directory from the AS3 svn repository
+  2) Obtain the BOSS plate design code from the SDSS-3 svn repository
+     (repo/platedesign)
+  3) Obtain the BOSS idlutils directory from the SDSS-3 svn repository
+     (repo/idlutils)
+  4) Add boss platedesign and idlutils directories to IDL path
+  5) Set environment variable PLATEDESIGN_DIR.  For me I use:
+     setenv PLATEDESIGN_DIR /boss/platedesign
+  6) Set environment variable MANGAROOT to point to where your svn
+     manga repository is installed.  The IDL code frequently looks for
+     reference files at specific points in the manga/manga3d directory
+     tree, and this variable tells it how to get there.  For me I use:
+     setenv MANGAROOT /manga
+  7) Set pipeline version:
+     setenv MANGAVER trunk
+  8) Add proper version of manga software to your IDL path:
+     setenv IDL_PATH ${IDL_PATH}:+$MANGAROOT/manga3d/$MANGAVER/
+     Note that this currently conflicts with the install directions for the
+     MaNGA simulator, which includes the entire manga/ directory.  This is BAD,
+     because it will include all versions of the pipeline.  Therefore if
+     you've got the simulator installed, change the IDL include path of
+     the simulator to
+     setenv IDL_PATH ${IDL_PATH}:+$MANGAROOT/utils/trunk
+     There is some file duplication between simulator and pipeline libraries.
+     This will be addressed at some point in time.
+  9) Set data directory.  I'm using:
+     setenv MANGA_DDIR /MANGA_local/Pipeline/MockObs/Data
+
+
+Basic idea:
+  There is an input file (*.rdx) that determines what exposures to combine
+  in the reductions.

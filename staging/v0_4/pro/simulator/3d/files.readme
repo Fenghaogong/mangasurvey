@@ -1,0 +1,10 @@
+manga_simcube.pro:  IDL program file for 3d simulator
+sample.sob: Sample 3d simulator input file
+samplecube.fits: Sample 3d simulator input cube
+samplewave.fits: Sample 3d simulator input wavelength file
+
+README: Describes how to run simulator
+files.readme: Describes files in directory
+
+mkcalifa_ngc2916.pro: Sample code to artificially redshift
+  CALIFA data and produce a new input cube for simulator.

@@ -1,0 +1,233 @@
+MaNGA Data Cube Simulator (manga_simcube.pro) README file
+
+Purpose:
+  Program simulates observation and reconstruction of a full 3D data
+  cube given realistic observing scenarios.  Accounts for spectral
+  dimension, realistic shot noise, detector noise, and sky background.
+  Also incorporates realistic spectral FWHM.  Note that input cube must
+  be flux calibrated in units of 1e-17 erg/s/cm2/Angstrom.
+  For reference, the machine this code was tested on runs the default
+  simulation described below in ~ 4 minutes.
+
+Basic installation of the MaNGA SVN code:
+  1) Get set up with an SVN account as per https://howdy.physics.nyu.edu/projects/as3/wiki/Software/SVNTutorial
+
+  2) IDL and the IDL astronomy user's library (http://idlastro.gsfc.nasa.gov/)
+     must both be installed on your machine.
+     Program has been tested using IDL 7.0.4 on a 64-bit Darwin Mac
+
+  3) Set the environment variable MANGAROOT in your .cshrc (or equivalent) file
+     to point to where your svn respository will be installed.
+     The IDL code frequently looks for reference files at specific
+     places in the MANGAROOT directory tree, and this variable tells it how to get
+     there.  For me, I use the line:
+     setenv MANGAROOT /manga
+
+  4) Obtain the latest copy of products from the svn repository.
+     You will need the products
+         as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk/
+         as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk/
+
+     Check these out using the commands (note detailed paths DO matter):
+     cd $MANGAROOT
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk manga3d/trunk
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk mangadb
+
+     You will also need the idlutils products from the SDSS3 SVN
+     This can be obtained publicly by
+         svn co http://www.sdss3.org/svn/repo/idlutils/trunk/ idlutils
+
+  5) Set the environment variable MANGAVER.  This controls versioning
+     of the MaNGA software for later reference, ensuring during deployment phase
+     that you always run the same version of software unless deliberately updating.
+     At the moment use
+     setenv MANGAVER trunk
+
+  6) In your .cshrc file (or the equivalent) add the manga directory tree to
+     your IDL path.  IDL should be capable of descending into subdirectories
+     when compiling code.  This should use the environment variables set above.
+     For instance, I use
+     setenv IDL_PATH ${IDL_PATH}:+$MANGAROOT/manga3d/$MANGAVER/
+     Make sure that idlutils in on your IDL path as well.
+
+Installing the cube simulator:
+  1) The simulation code and sample input files are located in the svn tree
+     at $MANGAROOT/manga3d/$MANGAVER/pro/simulator/3d/
+     You probably don't want this to be your working directory however, as any
+     files that you produce could get overwritten next time you update your svn
+     (or else you could be committing all of your new files back to the svn, which
+     we don't want!).  Therefore, start by making a new directory somewhere
+     outside of the svn tree.  Let's say I make the directory
+     mkdir ~drlaw/CubeTests
+
+  2) Copy over the example files (sample cube, sample input wavelength solution,
+     and sample observing file) to this new directory.
+     cp $MANGAROOT/manga3d/$MANGAVER/pro/simulator/3d/sample* ~drlaw/ImageTests/
+     Note that the sample cube has been moved to the mangadb product to save
+     space.  Get samplecube.fits from mangadb/simfiles/3d/samplecube.fits
+
+  3) Make a subdirectory entitled 'working' in your new directory.
+     The code often produces intermediary files (especially if the /debug flag
+     is set), and it assumes there is such a directory to put them in.  If not,
+     this part of the code will fail.  For the cube simulator however, it is
+     recommended that you NOT use the /debug option as it will slow down the code
+     significantly by performing many additional quality checks useful for debugging
+     purposes only, and also write multiple very large FITS files to your disk.
+     Use the /verbose flag instead to monitor progress.
+     cd ~drlaw/CubeTests
+     mkdir working
+
+  4) Start up IDL in your new directory and run the program!
+     cd ~drlaw/CubeTests
+     idl
+     .r manga_simcube.pro
+     manga_simcube,'samplecube.fits',1.0,'samplewave.fits',6500.,6800.,/verbose
+     All output files will be placed in the local directory from which the
+     IDL session was started.
+     Note that these sample input files are the CALIFA early observations of
+     UGC00233 obtained from http://www.caha.es/CALIFA/public_html/?q=content/publications
+
+How to run the cube simulator:
+  1) Compile the cube simulator by typing 
+     .r manga_simcube.pro
+     at the IDL prompt.  If this returns any errors, IDL probably cannot find
+     the IDL astronomy users library, the MaNGA SVN library, or both.
+
+  2) The simulator is called from the command line using a very limited set of
+     parameters specifying the required input values.
+     There are 5 *required* parameters to pass to the code: the file name
+     of the FITS cube to use as an input, the spatial pixel scale of the image
+     in arcseconds/pixel, a FITS file listing the wavelength solution of the input
+     cube, and parameters specifying the start and stop wavelengths for the simulation.
+     Note that the input cube should be in X,Y,lambda format.  It is not recommended
+     to try to simulated the full BOSS spectral range unless you have a fast CPU and
+     lots of RAM.
+     There are additional optional input parameters that are
+     set to default values if not specified.  These are:
+     xobj: X position of object of interest in input FITS file.  Default is the
+       middle of the image.
+     yobj: Y position of object of interest in input FITS file.  Default is the
+       middle of the image.
+     OutpFile: String name of output FITS cube (default is 'SimCube.fits')
+     OutpWaveFile: String name of output FITS wavelength solution (default is 'SimWave.fits')
+     sobfile: String name of simulated observing description file.
+       Default is 'sample.sob'
+     /ctflux: Set this flag to assume that CCD extraction cannot separate
+       flux introduced via crosstalk.  Default is to assume that it can.
+     /debug: Set this flag to run in debug mode and produce intermediary files
+     /verbose: Set this flag to print progress messages during the simulation
+
+  3) As an example, perform a simulated observation of the sample image
+     'samplecube.fits', assuming that it has pixel scale 1.0 arcsec/pixel and a
+     wavelength solution given by 'samplewave.fits'.
+     Note that these sample input files are the CALIFA early observations of
+     UGC00233 obtained from http://www.caha.es/CALIFA/public_html/?q=content/publications
+     Use a standard observing setup file, but set the simulation wavelength range to
+     bracket 6500-6800 Angstroms and run in verbose mode to print status messages:
+     manga_simcube,'samplecube.fits',1.0,'samplewave.fits',6500.,6800.,/verbose
+
+Modifying the observing setup:
+  All options governing the observational parameters for the simulation are
+  contained within the Simulated OBserving (.sob) file.  This plaintext file should
+  be self-explanatory, and allows the user to change the desired bundles
+  (called from the repository at $MANGAROOT/mangadb/metrology/),
+  adjust target declination, hour angle of observation, number of nights of 
+  observation, and much more.
+
+  The first set of parameters in the .sob file governs internal structure of the
+  simulator, and as such probably shouldn't be modified freely.  Changing the seed
+  for the random number generator is quite straight forward and behaves as expected,
+  but changing the working grid scale or working box size can result in highly
+  undesirable effects.
+
+  The second set of parameters governs the target, bundle, and basic observing
+  setup.  It is possible to specify the precise location of up to 3 dead fibers
+  if you wish (see $MANGAROOT/mangadb/metrology/hexaddressing.jpg
+  for a diagram of the 2-d fiber addressing scheme).
+
+  The third set of parameters governs the total number of observations.  3 exposures
+  per night is hard coded, but the user can specify the number of nights of
+  observation (up to 5) and how many observations in this time were bad 
+  (e.g., ignore them because of clouds, crappy seeing, failure to take the 
+  exposure, whatever).
+
+  The remaining parameters govern the conditions of each observation.  The position
+  angle of the bundle is set for each night.  Usually this will be 0, unless we
+  adopt a pin-based clocking mechanism, in which case it might be 0, -60, +60 on
+  three successive nights.  Each exposure can have its quality specified
+  (0=good, 1=bad or ignore); make sure that the total number of bad exposures is
+  the same as specified above otherwise the simulator might behave in undesirable
+  ways.  The dither position can be specified, default is that the first, second,
+  and third exposures are at positions 1, 2, and 3 of the dither triangle
+  respectively (the central pointing is in the middle of the triangle), so ALL
+  dither positions are offset from the base by the same distance, but in different
+  directions.  Seeing, length of integration, and hour angle at the midpoint of
+  the exposure can also be specified for each exposure.  With current survey
+  design, the hour angles should generally all be within 90 minutes of each other.
+
+How the code works:
+  A detailed breakdown of how the code works is provided in extensive comments
+  throughout the manga_simcube.pro file.  In overview, the program flow is as
+  follows:
+
+  1) Define default parameters if not specified.
+
+  2) Read in the simulated observation description (.sob file).
+
+  3) Define the map of fiber locations for the specified fiber bundle.
+
+  4) Read in the calibration file calibmatrix.fits that specifies details regarding
+     the BOSS wavelength scale, throughput, sky background, and efficiency.
+     Isolate the relative parts of the master wavelength vector to use for the
+     simulation.
+
+  5) Read in the input cube from the FITS file.  Scale it to the working
+     pixel scale, and crop out the spatial region necessary for the simulation
+     (i.e., slightly larger than the footprint of the chosen bundle).  If the input
+     image is bigger than necessary, simply crop out the region of interest.  This
+     is centered on the middle by default, but could be any arbitrary position (e.g.,
+     a galaxy in a wide-field image) if xobj & yobj were set.  If the input image
+     is smaller than necessary, pad around it with zeroes to make it the
+     appropriate size for the simulation.  Also crop out the appropriate spectral range
+     and interpolate the spectrum of each spatial pixel to the BOSS master wavelength
+     vector.  Smooth each spectrum by a kernel corresponding to the BOSS spectral
+     resolution.  Any wavelength ranges selected for simulation that are outside the
+     bounds of the input spectral range are set to zero.
+
+  6) Rescale key parameters to working pixel units from arcsec
+
+  7) Identify dead fibers in fiber_status
+
+  8) Define a matrix of fiber positions for all exposures and all wavelengths.  This takes into
+     account individual fiber position within a bundle, PA rotation, dither offset,
+     DAR offset, and positioning errors.  All of these except DAR should be constant with
+     wavelength.
+
+  9) Set up a bunch of storage arrays, then start a large loop over all wavelength channels.
+
+  10) Within loop, define a timer to estimate time until loop completion.
+
+  11) Within loop, make fiber maps for each exposure.  These are 2d images where each pixel is
+      tagged according to what fiber it is subtended by.
+
+  12) Within loop, convolve the corresponding spectral slice of the data cube with
+      a 2-component gaussian model of the observational psf (using Kolmogorov turbulence
+      pinned to the specified seeing at the guide wavelength), and convolve this with the 
+      fiber map to determine the amount of flux that makes it down each fiber.
+
+  13) Within loop, for each flux value convert from flux units to e- counts using BOSS
+      calibration matrix.  Figure out the sky counts and read noise at this wavelength.
+      Generate a random realization of the noise array using RANDOMN.  Add the noise to the
+      object counts and convert back to on-sky flux units.
+
+  14) Within loop, in debug mode make an 'image' for each exposure showing the flux in each
+      fiber.  This is NOT recommended to do unless debugging the code as it will write many LARGE
+      FITS files to disk in every single iteration of the loop, massively slowing down the code
+      with extra calculations and I/O and filling terabytes of disk space.
+
+  15) Within loop, we now know the amount of flux recovered by each fiber at the spectral slice
+      and the apparent x,y locations of the fibers.  Interpolate this information to a
+      regular output grid.  Current (October 2012) method adopts the
+      flux-conserving modified Shepard's method used by CALIFA.
+
+  16) End loop, assemble all simulated slices into a composite data cubes and write to disk.

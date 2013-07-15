@@ -1,0 +1,189 @@
+MaNGA Image Simulator (manga_simimage.pro) README file
+
+Purpose:
+  Program simulates image reconstruction at one wavelength slice given
+  realistic observing scenarios.  Does not account for the spectral
+  dimension, noise, or any detector characteristics, useful for
+  exploring image reconstruction and observing strategy ONLY.
+
+Basic installation of the MaNGA SVN code:
+  1) Get set up with an SVN account as per https://howdy.physics.nyu.edu/projects/as3/wiki/Software/SVNTutorial
+
+  2) IDL and the IDL astronomy user's library (http://idlastro.gsfc.nasa.gov/)
+     must both be installed on your machine.
+     Program has been tested using IDL 7.0.4 on a 64-bit Darwin Mac
+
+  3) Set the environment variable MANGAROOT in your .cshrc (or equivalent) file
+     to point to where your svn respository will be installed.
+     The IDL code frequently looks for reference files at specific
+     places in the MANGAROOT directory tree, and this variable tells it how to get
+     there.  For me, I use the line:
+     setenv MANGAROOT /manga
+
+  4) Obtain the latest copy of products from the svn repository.
+     You will need the products
+         as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk/
+         as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk/
+
+     Check these out using the commands (note detailed paths DO matter):
+     cd $MANGAROOT
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk manga3d/trunk
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk mangadb
+
+     You will also need the idlutils products from the SDSS3 SVN
+     This can be obtained publicly by
+         svn co http://www.sdss3.org/svn/repo/idlutils/trunk/ idlutils
+
+  5) Set the environment variable MANGAVER.  This controls versioning
+     of the MaNGA software for later reference, ensuring during deployment phase
+     that you always run the same version of software unless deliberately updating.
+     At the moment use
+     setenv MANGAVER trunk
+
+  6) In your .cshrc file (or the equivalent) add the manga directory tree to
+     your IDL path.  IDL should be capable of descending into subdirectories
+     when compiling code.  This should use the environment variables set above.
+     For instance, I use
+     setenv IDL_PATH ${IDL_PATH}:+$MANGAROOT/manga3d/$MANGAVER/
+     Make sure that idlutils in on your IDL path as well.
+
+Installing the image simulator:
+  1) The simulation code and sample input files are located in the svn tree
+     at $MANGAROOT/manga3d/$MANGAVER/pro/simulator/2d/
+     You probably don't want this to be your working directory however, as any
+     files that you produce could get overwritten next time you update your svn
+     (or else you could be committing all of your new files back to the svn, which
+     we don't want!).  Therefore, start by making a new directory somewhere
+     outside of the svn tree.  Let's say I make the directory
+     mkdir ~drlaw/ImageTests
+
+  2) Copy over the example files (sample image and sample observing file) to this
+     new directory.
+     cp $MANGAROOT/manga3d/$MANGAVER/pro/simulator/2d/sample* ~drlaw/ImageTests/
+
+  3) Make a subdirectory entitled 'working' in your new directory.
+     The code often produces intermediary files (especially if the /debug flag
+     is set), and it assumes there is such a directory to put them in.  If not,
+     this part of the code will fail.
+     cd ~drlaw/ImageTests
+     mkdir working
+
+  4) Start up IDL in your new directory and run the program!
+     cd ~drlaw/ImageTests
+     idl
+     .r manga_simimage.pro
+     manga_simimage,'sampleimage.fits',0.1,SimWave=9000.,/debug
+     All output files will be placed in the local directory from which the
+     IDL session was started.
+
+How to run the image simulator:
+  1) Compile the image simulator by typing 
+     .r manga_simimage.pro
+     at the IDL prompt.  If this returns any errors, IDL probably cannot find
+     the IDL astronomy users library, the MaNGA SVN library, or both.
+
+  2) The simulator is called from the command line using a very limited set of
+     parameters specifying the required input values.
+     There are only 2 *required* parameters to pass to the code: the file name
+     of the FITS image to use as an input, and the pixel scale of the image
+     in arcseconds/pixel.  There are additional optional input parameters that are
+     set to default values if not specified.  These are:
+     xobj: X position of object of interest in input FITS file.  Default is the
+       middle of the image.
+     yobj: Y position of object of interest in input FITS file.  Default is the
+       middle of the image.
+     OutpFile: String name of output FITS image (default is 'SimImage.fits')
+     sobfile: String name of simulated observing description file.
+       Default is 'sample.sob'
+     SimWave: Wavelength of simulation in Angstroms.  
+       Default is 5500. (guide wavelength)
+     /debug: Set this flag to run in debug mode and produce intermediary files
+
+  3) As an example, perform a simulated observation of the sample image
+     'sampleimage.fits', assuming that it has pixel scale 0.1 arcsec/pixel.
+     Use a standard observing setup file, but set the simulation wavelength to
+     9000 Angstroms and run in debug mode to produce helpful messages and
+     intermediary files:
+     manga_simimage,'sampleimage.fits',0.1,SimWave=9000.,/debug
+
+Modifying the observing setup:
+  All options governing the observational parameters for the simulation are
+  contained within the Simulated OBserving (.sob) file.  This plaintext file should
+  be self-explanatory, and allows the user to change the desired bundle size,
+  specify specific as-built bundles (note that it looks for these in the
+  $MANGAROOT/mangadb/metrology/ directory), adjust target declination,
+  hour angle of observation, number of nights of observation, and much more.
+
+  The first set of parameters in the .sob file governs internal structure of the
+  simulator, and as such probably shouldn't be modified freely.  Changing the seed
+  for the random number generator is quite straight forward and behaves as expected,
+  but changing the working grid scale or working box size can result in highly
+  undesirable effects.
+
+  The second set of parameters governs the target, bundle, and basic observing
+  setup.  It is possible to specify the precise location of up to 3 dead fibers
+  if you wish (see $MANGAROOT/mangadb/metrology/hexaddressing.jpg
+  for a diagram of the 2-d fiber addressing scheme).
+
+  The third set of parameters governs the total number of observations.  3 exposures
+  per night is hard coded, but the user can specify the number of nights of
+  observation (up to 5) and how many observations in this time were bad 
+  (e.g., ignore them because of clouds, crappy seeing, failure to take the 
+  exposure, whatever).
+
+  The remaining parameters govern the conditions of each observation.  The position
+  angle of the bundle is set for each night.  Usually this will be 0, unless we
+  adopt a pin-based clocking mechanism, in which case it might be 0, -60, +60 on
+  three successive nights.  Each exposure can have its quality specified
+  (0=good, 1=bad or ignore); make sure that the total number of bad exposures is
+  the same as specified above otherwise the simulator might behave in undesirable
+  ways.  The dither position can be specified, default is that the first, second,
+  and third exposures are at positions 1, 2, and 3 of the dither triangle
+  respectively (the central pointing is in the middle of the triangle), so ALL
+  dither positions are offset from the base by the same distance, but in different
+  directions.  Seeing, length of integration, and hour angle at the midpoint of
+  the exposure can also be specified for each exposure.  With current survey
+  design, the hour angles should generally all be within 90 minutes of each other.
+
+How the code works:
+  A detailed breakdown of how the code works is provided in extensive comments
+  throughout the manga_simimage.pro file.  In overview, the program flow is as
+  follows:
+
+  1) Define default parameters if not specified.
+
+  2) Read in the simulated observation description (.sob file).
+
+  3) Define the map of fiber locations for the specified fiber bundle.
+
+  4) Read in the input image from the FITS file.  Scale it to the working
+     pixel scale, and crop out the region necessary for the simulation
+     (i.e., slightly larger than the footprint of the chosen bundle).  If the input
+     image is bigger than necessary, simply crop out the region of interest.  This
+     is centered on the middle by default, but could be any arbitrary position (e.g.,
+     a galaxy in a wide-field image) if xobj & yobj were set.  If the input image
+     is smaller than necessary, pad around it with zeroes to make it the
+     appropriate size for the simulation.
+
+  5) Rescale key parameters to working pixel units from arcsec
+
+  6) Identify dead fibers in fiber_status
+
+  7) Define a matrix of fiber positions for all exposures.  This takes into
+     account individual fiber position within a bundle, PA rotation, dither offset,
+     DAR offset, and positioning errors.
+
+  8) Make fiber maps for each exposure.  These are 2d images where each pixel is
+     tagged according to what fiber it is subtended by.
+
+  9) For each exposure, convolve the input image with a 2-component gaussian
+     model of the observational psf, and convolve this with the fiber map to
+     determine the amount of flux that makes it down each fiber.
+
+  10) In debug mode, make an 'image' for each exposure showing the flux in each
+      fiber
+
+  11) We now know the amount of flux down each fiber for each exposure, and the
+      x,y locations of each of these fibers.  Interpolate this information to a
+      regular output grid.  Current (October 2012) method adopts the
+      flux-conserving modified Shepard's method used by CALIFA.
