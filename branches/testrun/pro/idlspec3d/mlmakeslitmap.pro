@@ -16,7 +16,7 @@
 pro mlmakeslitmap,plate,mjd
 
 ; Find plugM file from svn archive
-plugMtarget=strcompress(getenv('MANGAROOT')+'/mangadb/plugmaps/plPlugMapM-'+string(plate)+'-',/remove_all)
+plugMtarget=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/plugmaps/plPlugMapM-'+string(plate)+'-',/remove_all)
 plugMfile=file_search(plugMtarget+'*')
 plugMfile=mlmatchmjd(plugMfile,plugMtarget,mjd)
 ; Read plugmap
@@ -26,7 +26,7 @@ plugM=plugM[where(plugM.holeType eq 'MANGA')]
 
 ; Find plateHoles file from svn archive
 ; Need to do something more clever here when plateid >9999
-platefile=strcompress(getenv('MANGAROOT')+'/mangadb/platedesign/plateholes/plateHolesSorted-00'+string(plate)+'.par',/remove_all)
+platefile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/platedesign/plateholes/plateHolesSorted-00'+string(plate)+'.par',/remove_all)
 platefile=file_search(platefile)
 ; If platefile not found, exit
 if (size(platefile))[1] ne 1 then begin
@@ -45,11 +45,11 @@ else cart=strcompress(cart,/remove_all)
 
 
 ; Define the slitmap file to produce in svn archive
-slitfile=strcompress(getenv('MANGAROOT')+'/mangadb/slitmaps/slitmap-'+string(plate)+'-'+string(mjd)+'.par',/remove_all)
+slitfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/slitmaps/slitmap-'+string(plate)+'-'+string(mjd)+'.par',/remove_all)
 
 
 ; Figure out which slitmap template is appropriate
-slittemplate=strcompress(getenv('MANGAROOT')+'/mangadb/templates/slitmap-cart'+cart+'-',/remove_all)
+slittemplate=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/templates/slitmap-cart'+cart+'-',/remove_all)
 slittemplatefile=file_search(slittemplate+'*')
 slittemplatefile=mlmatchmjd(slittemplatefile,slittemplate,mjd)
 

@@ -23,7 +23,7 @@ status=0
 ; Calibration file listing standard wavelength grid
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-calibfile=strcompress(getenv('MANGAROOT')+'/mangadb/bosscal/56280/calibmatrix.fits',/remove_all)
+calibfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/bosscal/56280/calibmatrix.fits',/remove_all)
 splog,calibfile
 
 ; Check whether calibration file exists, return error code -120 if not

@@ -988,7 +988,7 @@ pro readbmap
 
 common cf_data
 
-bmfile=strcompress(getenv('MANGAROOT')+'/mangadb/metrology/56280/v1.1/'+indextype+'_bmp_v1.1.par',/remove_all)
+bmfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/metrology/56280/v1.1/'+indextype+'_bmp_v1.1.par',/remove_all)
 bmap=yanny_readone(bmfile,'BUNDLEMAP',hdr=bhdr)
 
 end
@@ -997,7 +997,7 @@ pro readslitmap
 
 common cf_data
 
-slitmapfile=strcompress(getenv('MANGAROOT')+'/mangadb/slitmaps/slitmap-'+string(plate)+'-'+string(mjd)+'.par',/remove_all)
+slitmapfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/slitmaps/slitmap-'+string(plate)+'-'+string(mjd)+'.par',/remove_all)
 print,slitmapfile
 smap=yanny_readone(slitmapfile,'SMAP',hdr=shdr)
 

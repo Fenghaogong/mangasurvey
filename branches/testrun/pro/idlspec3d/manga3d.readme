@@ -5,7 +5,7 @@ Purpose:
   it into a calibrated data cube.
 
 Installation:
-  1) Obtain the /manga/manga3d directory from the AS3 svn repository
+  1) Obtain the /manga/mangadrp directory from the AS3 svn repository
   2) Obtain the BOSS plate design code from the SDSS-3 svn repository
      (repo/platedesign)
   3) Obtain the BOSS idlutils directory from the SDSS-3 svn repository
@@ -13,27 +13,19 @@ Installation:
   4) Add boss platedesign and idlutils directories to IDL path
   5) Set environment variable PLATEDESIGN_DIR.  For me I use:
      setenv PLATEDESIGN_DIR /boss/platedesign
-  6) Set environment variable MANGAROOT to point to where your svn
+  6) Set environment variable MANGADRP_DIR to point to where your svn
      manga repository is installed.  The IDL code frequently looks for
-     reference files at specific points in the manga/manga3d directory
+     reference files at specific points in the mangadrp directory
      tree, and this variable tells it how to get there.  For me I use:
-     setenv MANGAROOT /manga
+     setenv MANGADRP_DIR /manga/mangadrp
   7) Set pipeline version:
-     setenv MANGAVER trunk
+     setenv MANGADRP_VER branches/testrun
   8) Add proper version of manga software to your IDL path:
-     setenv IDL_PATH ${IDL_PATH}:+$MANGAROOT/manga3d/$MANGAVER/
-     Note that this currently conflicts with the install directions for the
-     MaNGA simulator, which includes the entire manga/ directory.  This is BAD,
-     because it will include all versions of the pipeline.  Therefore if
-     you've got the simulator installed, change the IDL include path of
-     the simulator to
-     setenv IDL_PATH ${IDL_PATH}:+$MANGAROOT/utils/trunk
-     There is some file duplication between simulator and pipeline libraries.
-     This will be addressed at some point in time.
+     setenv IDL_PATH ${IDL_PATH}:+$MANGADRP_DIR/$MANGADRP_VER/
   9) Set data directory.  I'm using:
-     setenv MANGA_DDIR /MANGA_local/Pipeline/MockObs/Data
+     setenv MANGA_DDIR /MANGA_local/Pipeline/TestRun
 
 
 Basic idea:
-  There is an input file (*.rdx) that determines what exposures to combine
+  There is an input file (m3dplan.par) that determines what exposures to combine
   in the reductions.

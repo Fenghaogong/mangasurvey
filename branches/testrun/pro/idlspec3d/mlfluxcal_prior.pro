@@ -175,10 +175,10 @@ for ifile=0, nfiles-1 do begin
   expnum = sxpar(hdr, 'EXPOSURE')
 
   if(camnames[icam] eq 'b1') then begin
-    calibfile=getenv('MANGAROOT')+'/mangadb/bosscal/56280/spFluxcalib-b1-00154443.fits.gz'
+    calibfile=getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/bosscal/56280/spFluxcalib-b1-00154443.fits.gz'
   endif
   if(camnames[icam] eq 'r1') then begin
-    calibfile=getenv('MANGAROOT')+'/mangadb/bosscal/56280/spFluxcalib-r1-00154443.fits.gz'
+    calibfile=getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/bosscal/56280/spFluxcalib-r1-00154443.fits.gz'
   endif
 
   if (keyword_set(calibfile)) then begin

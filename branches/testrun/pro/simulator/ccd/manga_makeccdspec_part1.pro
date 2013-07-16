@@ -5,7 +5,7 @@ zsize=(size(galflux))[1]
 inpwave=readfits('./inputwave.fits')
 
 ; Read in BOSS calibration file
-  calibfile=getenv('MANGAROOT')+'/manga3d/'+getenv('MANGAVER')+'/calib/calibmatrix.fits'
+  calibfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'calib/calibmatrix.fits',/remove_all)
   calibmatrix=readfits(calibfile)
   wave=calibmatrix[0,*]
   nwave=(size(calibmatrix))[2]

@@ -1,6 +1,6 @@
 = Quick Look Inspection of MaNGA Reductions =
 
-manga_quicklook is designed to allow inspection of spectra from individual fibers based on either SOS or full-pipeline reductions.  The program is located on the as3 svn at manga/manga3d/trunk/pro/vis/manga_quicklook.pro
+manga_quicklook is designed to allow inspection of spectra from individual fibers based on either SOS or full-pipeline reductions.  The program is located on the as3 svn at manga/mangadrp/branches/testrun/pro/vis/manga_quicklook.pro
 
 ----
 
@@ -12,38 +12,39 @@ manga_quicklook is designed to allow inspection of spectra from individual fiber
      must both be installed on your machine.
      Program has been tested using IDL 7.0.4 on a 64-bit Darwin Mac
 
-  3) Set the environment variable MANGAROOT in your .cshrc (or equivalent) file
-     to point to where your svn respository will be installed.
+  3) Set the environment variables MANGACORE_DIR and MANGADRP_DIR in your .cshrc (or equivalent) file
+     to point to where your svn respositories will be installed.
      The IDL code frequently looks for reference files at specific
-     places in the MANGAROOT directory tree, and this variable tells it how to get
-     there.  For me, I use the line:
-     setenv MANGAROOT /manga
+     places in these directory trees, and these variables tell it how to get
+     there.  Also set the variables MANGACORE_VER and MANGADRP_VER to the testrun branch.
+     This controls versioning
+     of the MaNGA software for later reference, ensuring during deployment phase
+     that you always run the same version of software unless deliberately updating.
+     For me, I use the lines:
+     setenv MANGACORE_DIR /manga/mangacore
+     setenv MANGACORE_VER branches/testrun
+     setenv MANGADRP_DIR /manga/mangadrp
+     setenv MANGADRP_VER branches/testrun
 
   4) Obtain the latest copy of products from the svn repository.
      You will need the products
-         as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk/
-         as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk/
+         as3svn@howdy.physics.nyu.edu/manga/mangadrp/branches/testrun
+         as3svn@howdy.physics.nyu.edu/manga/mangacore/branches/testrun
 
      Check these out using the commands (note detailed paths DO matter):
-     cd $MANGAROOT
-     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk manga3d/trunk
-     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk mangadb
+     cd to wherever you plan to install the svn products
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/mangadrp/branches/testrun mangadrp/branches/testrun
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/mangacore/branches/testrun mangacore/branches/testrun
 
      You will also need the idlutils products from the SDSS3 SVN
      This can be obtained publicly by
          svn co http://www.sdss3.org/svn/repo/idlutils/trunk/ idlutils
 
-  5) Set the environment variable MANGAVER.  This controls versioning
-     of the MaNGA software for later reference, ensuring during deployment phase
-     that you always run the same version of software unless deliberately updating.
-     At the moment use
-     setenv MANGAVER trunk
-
-  6) In your .cshrc file (or the equivalent) add the manga directory tree to
+  5) In your .cshrc file (or the equivalent) add the manga directory tree to
      your IDL path.  IDL should be capable of descending into subdirectories
      when compiling code.  This should use the environment variables set above.
      For instance, I use
-     setenv IDL_PATH ${IDL_PATH}:+$MANGAROOT/manga3d/$MANGAVER/
+     setenv IDL_PATH ${IDL_PATH}:+$MANGADRP_DIR/$MANGADRP_VER/
      Make sure that idlutils in on your IDL path as well.
 
 -------
@@ -53,7 +54,7 @@ manga_quicklook is designed to allow inspection of spectra from individual fiber
 Start IDL in any directory and type manga_quicklook
 
 It will open a dialog window to select the input spectrum file.  This should either be the SOS file starting with 'sci-' or the full pipeline file starting with 'spFrame'.
-In order to function properly, this code relies upon finding appropriate bundle maps describing the locations of individual fibers within bundles, and finding the slitmap describing what is plugged where along the slit and where it maps to on the plate.  The paths to the former is specified relative to MANGAROOT, the code searches for the latter in the reduced data directory.
+In order to function properly, this code relies upon finding appropriate bundle maps describing the locations of individual fibers within bundles, and finding the slitmap describing what is plugged where along the slit and where it maps to on the plate.  The paths to the former is specified relative to MANGACORE_DIR, the code searches for the latter in the reduced data directory.
 
 ------
 

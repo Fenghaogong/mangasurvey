@@ -577,7 +577,7 @@ sxaddpar, objhdr, 'SKYCHI2', skychi2, ' Mean chi^2 of sky-subtraction'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-sxaddpar, objhdr, 'MANGAVER', getenv('MANGAVER')
+sxaddpar, objhdr, 'MANGADRP_VER', getenv('MANGADRP_VER')
 
 ; Determine output details from provided spsframefile name
 outname=spsframefile
