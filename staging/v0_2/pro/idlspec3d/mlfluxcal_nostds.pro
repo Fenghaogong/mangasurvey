@@ -73,7 +73,7 @@ function mlfluxcal_nostds,fileb1,filer1,Cfile1,obsparam,slitmap,waveset
 
   ; Define approximate calibration vector from the blue/red throughput
   ; values in the MaNGA/BOSS simulator calibration file
-  calibfile=strcompress(getenv('MANGAROOT')+'/mangadb/bosscal/56280/calibmatrix.fits',/remove_all)
+  calibfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/bosscal/56280/calibmatrix.fits',/remove_all
   ; Check whether calibration file exists, return error code -120 if not
   junk=findfile(calibfile,count=ct)
   if (ct EQ 0) then return,-120L

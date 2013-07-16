@@ -194,7 +194,7 @@ pro manga_simcube, InpCubeFile, pixscaleI, InpWaveFile, wavestart, wavestop, xob
   ; Define spectrograph calibration information
   ; Calibration information is stored in the file boss_calib.dat, which
   ; was assembled from boss_sky.dat, boss_throughput.dat, and boss_nphotons.dat
-  calibfile=getenv('MANGAROOT')+'/mangadb/bosscal/56280/calibmatrix.fits'
+  calibfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/bosscal/56280/calibmatrix.fits',/remove_all)
   calibmatrix=readfits(calibfile)
   nwave=(size(calibmatrix))[2]
   ; wave is the master wavelength vector for the simulation, log spacing

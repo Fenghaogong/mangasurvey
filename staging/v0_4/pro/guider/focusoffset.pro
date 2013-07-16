@@ -25,7 +25,7 @@ pro focusoffset, xfocal, yfocal, wavearr, focusarr
 common focustable, fldangle, lambda ,surface1,fldht,surface2,foffset,rms
 
    if n_elements(fldangle) eq 0 then begin
-      dir = getenv('MANGAROOT')+'/manga3d/'+getenv('MANGAVER')+'/etc/'
+      dir = getenv('MANGADRP_DIR')+'/'+getenv('MANGADRP_VER')+'/etc/'
       readcol,dir+'focalplane.txt',fldangle,lambda,surface1,fldht,surface2,foffset,rms
    endif
 

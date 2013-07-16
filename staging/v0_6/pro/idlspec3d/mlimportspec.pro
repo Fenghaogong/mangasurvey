@@ -155,20 +155,20 @@ if (flavor eq 'full') then begin
 
   ; If a subdirectory for the current working version of the pipeline
   ; doesn't exist, create it.
-  spawn, strcompress('mkdir -p '+filepath+getenv('MANGAVER')+'/')
+  spawn, strcompress('mkdir -p '+filepath+getenv('MANGADRP_VER')+'/')
 
   ; Define filenames, b+r for spFrame and spSFrame
   ; Just a single name for spCFrame and spFFrame (b+r combined)
   ; Indicate whether spec 1 or 2
   fileb1=strcompress(filepath+'spFrame-b1-'+redx.expnum+'.fits.gz')
   filer1=strcompress(filepath+'spFrame-r1-'+redx.expnum+'.fits.gz')
-  Sfileb1=strcompress(filepath+getenv('MANGAVER')+'/spSFrame-b1-'+redx.expnum+'.fits.gz')
-  plotfileb1=strcompress(filepath+getenv('MANGAVER')+'/spSFrame-b1-'+redx.expnum+'.ps')
-  Sfiler1=strcompress(filepath+getenv('MANGAVER')+'/spSFrame-r1-'+redx.expnum+'.fits.gz')
-  plotfiler1=strcompress(filepath+getenv('MANGAVER')+'/spSFrame-r1-'+redx.expnum+'.ps')
-  Cfile1=strcompress(filepath+getenv('MANGAVER')+'/spCFrame-'+redx.expnum+'.fits.gz')
-  plotfilec=strcompress(filepath+getenv('MANGAVER')+'/spCFrame-'+redx.expnum+'.ps')
-  Ffile1=strcompress(filepath+getenv('MANGAVER')+'/spFFrame-'+redx.expnum+'.fits.gz')
+  Sfileb1=strcompress(filepath+getenv('MANGADRP_VER')+'/spSFrame-b1-'+redx.expnum+'.fits.gz')
+  plotfileb1=strcompress(filepath+getenv('MANGADRP_VER')+'/spSFrame-b1-'+redx.expnum+'.ps')
+  Sfiler1=strcompress(filepath+getenv('MANGADRP_VER')+'/spSFrame-r1-'+redx.expnum+'.fits.gz')
+  plotfiler1=strcompress(filepath+getenv('MANGADRP_VER')+'/spSFrame-r1-'+redx.expnum+'.ps')
+  Cfile1=strcompress(filepath+getenv('MANGADRP_VER')+'/spCFrame-'+redx.expnum+'.fits.gz')
+  plotfilec=strcompress(filepath+getenv('MANGADRP_VER')+'/spCFrame-'+redx.expnum+'.ps')
+  Ffile1=strcompress(filepath+getenv('MANGADRP_VER')+'/spFFrame-'+redx.expnum+'.fits.gz')
 
   ; Identify appropriate flatfields for later poisson limit calculations
   flatb1=file_search(filepath+'spFlat-b1-*',count=nflat)

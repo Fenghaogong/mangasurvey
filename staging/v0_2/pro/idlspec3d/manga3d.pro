@@ -62,7 +62,7 @@ pro manga3d, input=input, outname=outname, inspect=inspect, doall=doall
   ; Start logging
   splog,filename=strcompress(strmid(input,0,strpos(input,'.par'))+'.log')
   splog,'Reduction started at ',tstart
-  splog,'Using reduction pipeline version ',getenv('MANGAVER')
+  splog,'Using reduction pipeline version ',getenv('MANGADRP_VER')
   splog,strcompress('Processing using flavor '+flavor)
 
   ; Pipeline status starts off as 0
@@ -238,7 +238,7 @@ spawn,strcompress('mkdir '+outpath)
 if (flavor eq 'sos') then outpath=outpath+'sos/' $
 else outpath=outpath+'full/'
 spawn,strcompress('mkdir '+outpath)
-outpath=outpath+getenv('MANGAVER')+'/'
+outpath=outpath+getenv('MANGADRP_VER')+'/'
 spawn,strcompress('mkdir '+outpath)
 outpath=outpath+redx[0].plate+'/'
 spawn,strcompress('mkdir '+outpath)
@@ -330,7 +330,7 @@ fxaddpar,head,'DISPAXIS',3
 fxaddpar,head,'UNITS','1e-17 erg/s/cm^2/Angstrom'
 
 fxaddpar,head,'SURVEY','MANGA'
-fxaddpar,head,'MANGAVER',getenv('MANGAVER')
+fxaddpar,head,'MANGADRP_VER',getenv('MANGADRP_VER')
 
 outfile=strcompress(outpath+outname+'.fits',/remove_all)
    ; HDU #0 is cube

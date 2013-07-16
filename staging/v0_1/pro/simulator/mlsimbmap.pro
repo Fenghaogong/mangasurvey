@@ -82,7 +82,7 @@ function mlsimbmap,BType,nfiber,fiber_xcen,fiber_ycen,fiber_status,corediam,dith
 
   ; If BType is -1, read in fiber locations from the specified .bm file
   if (BType eq -1) then begin
-    BMfile=strcompress(getenv('MANGAROOT')+'/mangadb/metrology/'+BMfile)
+    BMfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/metrology/'+BMfile,/remove_all)
 
     bmdata=yanny_readone(BMfile,'BUNDLEMAP',hdr=hdr)
     fiber_xcen=-bmdata.xpmm*1000.

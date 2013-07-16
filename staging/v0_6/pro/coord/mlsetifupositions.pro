@@ -94,7 +94,7 @@ nfiber=(size(xinbundle))[1]
 
 ; Read info from plDrillPos file (fiducial hole locations)
 platenum=obsparam.plate
-path=strcompress(getenv('MANGAROOT')+'/mangadb/drill/')
+path=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/drill/',/remove_all)
 
 drillfile=strcompress(path+'plDrillPos-'+platenum+'.par'); Fiducial positions
 drillcmmfile=strcompress(path+'plate'+platenum+'_CMM.par'); Measured positions

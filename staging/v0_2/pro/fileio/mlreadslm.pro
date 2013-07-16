@@ -20,7 +20,7 @@ function mlreadslm,plate,mjd,slitmap
 ; Status starts off OK
 status=0
 
-slmfile=strcompress(getenv('MANGAROOT')+'/mangadb/slitmaps/slitmap-'+string(plate)+'-'+string(mjd)+'.par',/remove_all)
+slmfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/slitmaps/slitmap-'+string(plate)+'-'+string(mjd)+'.par',/remove_all)
 
 splog,slmfile
 

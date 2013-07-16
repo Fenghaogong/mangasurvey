@@ -68,7 +68,7 @@ pro manga3d, input=input, outname=outname, inspect=inspect, doall=doall
   ; Start logging
   splog,filename=strcompress(strmid(input,0,strpos(input,'.par'))+'.log')
   splog,'Reduction started at ',tstart
-  splog,'Using reduction pipeline version ',getenv('MANGAVER')
+  splog,'Using reduction pipeline version ',getenv('MANGADRP_VER')
   splog,strcompress('Processing using flavor '+flavor)
 
   ; Pipeline status starts off as 0
@@ -239,7 +239,7 @@ for i=0,nexp-1 do begin
   ;  Given final grid of x,y positions, make a map showing S/N ratio
   ; in individual fibers for each exposure
   status=mlfibersn(tempx/pixscale,tempy/pixscale,fstat,wave,spec,specivar,FiberSNgMap,FiberSNrMap,FiberSNiMap,FiberSNTable)
-  snfile=strcompress(filepath+getenv('MANGAVER')+'/snmap-'+redx[i].expnum+'-'+redx[i].ifuname+'.fits')
+  snfile=strcompress(filepath+getenv('MANGADRP_VER')+'/snmap-'+redx[i].expnum+'-'+redx[i].ifuname+'.fits')
   mwrfits,FiberSNgMap,snfile,/create
   mwrfits,FiberSNrMap,snfile
   mwrfits,FiberSNiMap,snfile
@@ -272,7 +272,7 @@ spawn,strcompress('mkdir -p '+outpath)
 if (flavor eq 'sos') then outpath=outpath+'sos/' $
 else outpath=outpath+'full/'
 spawn,strcompress('mkdir -p '+outpath)
-outpath=outpath+getenv('MANGAVER')+'/'
+outpath=outpath+getenv('MANGADRP_VER')+'/'
 spawn,strcompress('mkdir -p '+outpath)
 outpath=outpath+redx[0].plate+'/'
 spawn,strcompress('mkdir -p '+outpath)
@@ -387,7 +387,7 @@ fxaddpar,head,'DISPAXIS',3
 fxaddpar,head,'UNITS','1e-17 erg/s/cm^2/Angstrom'
 
 fxaddpar,head,'SURVEY','MANGA'
-fxaddpar,head,'MANGAVER',getenv('MANGAVER')
+fxaddpar,head,'MANGADRP_VER',getenv('MANGADRP_VER')
 
 
 ; Total integration time in decimal hours

@@ -24,7 +24,7 @@ function mlreadbm,ifuname,mjd,bmap
 status=0
 
 ; File root for metrology data
-bmtarget=strcompress(getenv('MANGAROOT')+'/mangadb/metrology/',/remove_all)
+bmtarget=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/metrology/',/remove_all)
 ; Find the most recent mjd of metrology data that is before mjd of observation
 bmfile=file_search(bmtarget,'[0-9]????')
 bmtarget=strcompress(mlmatchmjd(bmfile,bmtarget,mjd)+'/',/remove_all)

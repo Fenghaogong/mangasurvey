@@ -13,43 +13,44 @@ Basic installation of the MaNGA SVN code:
      must both be installed on your machine.
      Program has been tested using IDL 7.0.4 on a 64-bit Darwin Mac
 
-  3) Set the environment variable MANGAROOT in your .cshrc (or equivalent) file
-     to point to where your svn respository will be installed.
+  3) Set the environment variables MANGACORE_DIR and MANGADRP_DIR in your .cshrc (or equivalent) file
+     to point to where your svn respositories will be installed.
      The IDL code frequently looks for reference files at specific
-     places in the MANGAROOT directory tree, and this variable tells it how to get
-     there.  For me, I use the line:
-     setenv MANGAROOT /manga
+     places in these directory trees, and these variables tell it how to get
+     there.  Also set the variables MANGACORE_VER and MANGADRP_VER to the testrun branch.
+     This controls versioning
+     of the MaNGA software for later reference, ensuring during deployment phase
+     that you always run the same version of software unless deliberately updating.
+     For me, I use the lines:
+     setenv MANGACORE_DIR /manga/mangacore
+     setenv MANGACORE_VER branches/testrun
+     setenv MANGADRP_DIR /manga/mangadrp
+     setenv MANGADRP_VER branches/testrun
 
   4) Obtain the latest copy of products from the svn repository.
      You will need the products
-         as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk/
-         as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk/
+         as3svn@howdy.physics.nyu.edu/manga/mangadrp/branches/testrun
+         as3svn@howdy.physics.nyu.edu/manga/mangacore/branches/testrun
 
      Check these out using the commands (note detailed paths DO matter):
-     cd $MANGAROOT
-     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/manga3d/trunk manga3d/trunk
-     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/mangadb/trunk mangadb
+     cd to wherever you plan to install the svn products
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/mangadrp/branches/testrun mangadrp/branches/testrun
+     svn co svn+ssh://as3svn@howdy.physics.nyu.edu/manga/mangacore/branches/testrun mangacore/branches/testrun
 
      You will also need the idlutils products from the SDSS3 SVN
      This can be obtained publicly by
          svn co http://www.sdss3.org/svn/repo/idlutils/trunk/ idlutils
 
-  5) Set the environment variable MANGAVER.  This controls versioning
-     of the MaNGA software for later reference, ensuring during deployment phase
-     that you always run the same version of software unless deliberately updating.
-     At the moment use
-     setenv MANGAVER trunk
-
-  6) In your .cshrc file (or the equivalent) add the manga directory tree to
+  5) In your .cshrc file (or the equivalent) add the manga directory tree to
      your IDL path.  IDL should be capable of descending into subdirectories
      when compiling code.  This should use the environment variables set above.
      For instance, I use
-     setenv IDL_PATH ${IDL_PATH}:+$MANGAROOT/manga3d/$MANGAVER/
+     setenv IDL_PATH ${IDL_PATH}:+$MANGADRP_DIR/$MANGADRP_VER/
      Make sure that idlutils in on your IDL path as well.
 
 Installing the image simulator:
   1) The simulation code and sample input files are located in the svn tree
-     at $MANGAROOT/manga3d/$MANGAVER/pro/simulator/2d/
+     at $MANGADRP_DIR/$MANGADRP_VER/pro/simulator/2d/
      You probably don't want this to be your working directory however, as any
      files that you produce could get overwritten next time you update your svn
      (or else you could be committing all of your new files back to the svn, which
@@ -59,7 +60,7 @@ Installing the image simulator:
 
   2) Copy over the example files (sample image and sample observing file) to this
      new directory.
-     cp $MANGAROOT/manga3d/$MANGAVER/pro/simulator/2d/sample* ~drlaw/ImageTests/
+     cp $MANGADRP_DIR/$MANGADRP_VER/pro/simulator/2d/sample* ~drlaw/ImageTests/
 
   3) Make a subdirectory entitled 'working' in your new directory.
      The code often produces intermediary files (especially if the /debug flag
@@ -111,7 +112,7 @@ Modifying the observing setup:
   contained within the Simulated OBserving (.sob) file.  This plaintext file should
   be self-explanatory, and allows the user to change the desired bundle size,
   specify specific as-built bundles (note that it looks for these in the
-  $MANGAROOT/mangadb/metrology/ directory), adjust target declination,
+  $MANGACORE_DIR/$MANGACORE_VER/metrology/ directory), adjust target declination,
   hour angle of observation, number of nights of observation, and much more.
 
   The first set of parameters in the .sob file governs internal structure of the
@@ -122,7 +123,7 @@ Modifying the observing setup:
 
   The second set of parameters governs the target, bundle, and basic observing
   setup.  It is possible to specify the precise location of up to 3 dead fibers
-  if you wish (see $MANGAROOT/mangadb/metrology/hexaddressing.jpg
+  if you wish (see $MANGACORE_DIR/$MANGACORE_VER/metrology/hexaddressing.jpg
   for a diagram of the 2-d fiber addressing scheme).
 
   The third set of parameters governs the total number of observations.  3 exposures

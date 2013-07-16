@@ -1,7 +1,7 @@
 pro posoffset,plate,mjd
 
    platenum = string(plate,format='(i0.0)')
-   path=strcompress(getenv('MANGAROOT')+'/mangadb/drill/')
+   path=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/drill/',/remove_all)
    drillfile=strcompress(path+'plDrillPos-'+platenum+'.par')
    drillcmmfile=strcompress(path+'plate'+platenum+'_CMM.par')
 

@@ -39,7 +39,7 @@ endif
 nexp=(size(frames))[1]
 
 ; Read sample exp file
-samplefile=strcompress(getenv('MANGAROOT')+'/mangadb/templates/exp-56280.par',/remove_all)
+samplefile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/templates/exp-56280.par',/remove_all)
 ; Read observing parameter block
 sampleparam=yanny_readone(samplefile,'OPARAM',hdr=ehdr)
 
@@ -51,7 +51,7 @@ head=headfits(frames[0])
 plugname=fxpar(head,'NAME')
 
 ; Find the corresponding plugmap file from mangadb
-plugfile=strcompress(getenv('MANGAROOT')+'/mangadb/plugmaps/plPlugMapM-'+plugname+'.par',/remove_all)
+plugfile=strcompress(getenv('MANGACORE_DIR')+'/'+getenv('MANGACORE_VER')+'/plugmaps/plPlugMapM-'+plugname+'.par',/remove_all)
 temp=findfile(plugfile,count=ct)
 if ct eq 0 then begin
   splog,'ERROR: Cannot find plugmap',plugfile

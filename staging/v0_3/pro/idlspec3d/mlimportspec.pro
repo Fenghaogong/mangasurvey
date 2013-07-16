@@ -153,17 +153,17 @@ if (flavor eq 'full') then begin
 
   ; If a subdirectory for the current working version of the pipeline
   ; doesn't exist, create it.
-  spawn, strcompress('mkdir -p '+filepath+getenv('MANGAVER')+'/')
+  spawn, strcompress('mkdir -p '+filepath+getenv('MANGADRP_VER')+'/')
 
   ; Define filenames, b+r for spFrame and spSFrame
   ; Just a single name for spCFrame and spFFrame (b+r combined)
   ; Indicate whether spec 1 or 2
   fileb1=strcompress(filepath+'spFrame-b1-'+redx.expnum+'.fits.gz')
   filer1=strcompress(filepath+'spFrame-r1-'+redx.expnum+'.fits.gz')
-  Sfileb1=strcompress(filepath+getenv('MANGAVER')+'/spSFrame-b1-'+redx.expnum+'.fits.gz')
-  Sfiler1=strcompress(filepath+getenv('MANGAVER')+'/spSFrame-r1-'+redx.expnum+'.fits.gz')
-  Cfile1=strcompress(filepath+getenv('MANGAVER')+'/spCFrame-'+redx.expnum+'.fits.gz')
-  Ffile1=strcompress(filepath+getenv('MANGAVER')+'/spFFrame-'+redx.expnum+'.fits.gz')
+  Sfileb1=strcompress(filepath+getenv('MANGADRP_VER')+'/spSFrame-b1-'+redx.expnum+'.fits.gz')
+  Sfiler1=strcompress(filepath+getenv('MANGADRP_VER')+'/spSFrame-r1-'+redx.expnum+'.fits.gz')
+  Cfile1=strcompress(filepath+getenv('MANGADRP_VER')+'/spCFrame-'+redx.expnum+'.fits.gz')
+  Ffile1=strcompress(filepath+getenv('MANGADRP_VER')+'/spFFrame-'+redx.expnum+'.fits.gz')
 
   ; Sky subtraction, flux calibration, and flux correction all on by default
   doskysub=1
