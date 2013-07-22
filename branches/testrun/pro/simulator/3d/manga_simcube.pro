@@ -103,6 +103,8 @@
 ;   v1.12: 30-May-2013  D. Law
 ;       Added /flatsky option which uses a very simplified sky model
 ;       that has no lines and is just a tilted line in log(flux) space.
+;   v1.13: 22-Jul-2013 D. Law
+;       Fixed calculation of inverse variance extension
 ;
 ; Function prototypes
 forward_function mlbundlemap
@@ -442,13 +444,13 @@ pro manga_simcube, InpCubeFile, pixscaleI, InpWaveFile, wavestart, wavestop, xob
   statout=fltarr(nexp*nfiber)
   fluxout=fltarr(nexp*nfiber)
   errout=fltarr(nexp*nfiber)
-  varout=fltarr(nexp*nfiber)
+  ivarout=fltarr(nexp*nfiber)
   ; Output sizes
   XsizeOUT=fix(Xsize*pixscaleW/pixscaleO)
   YsizeOUT=fix(Ysize*pixscaleW/pixscaleO)
   ; Final output cube
   FinalCube=fltarr(XsizeOUT,YsizeOUT,nwave)
-  FinalErrCube=fltarr(XsizeOUT,YsizeOUT,nwave)
+  FinalIvarCube=fltarr(XsizeOUT,YsizeOUT,nwave)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;; Loop through wavelength, doing the remaining caculations
@@ -591,8 +593,8 @@ for k=0,nwave-1 do begin
   if (size(unphys))[0] ne 0 then objphotCT[unphys]=0.
   ; Compute noise array from the sum of sky noise, read noise,
   ; and the object flux WITH crosstalk
-  var=sqrt(objphotCT+skyphot+rn*rn)
-  noisearr=RANDOMN(seed,nfiber,nexp)*var
+  nse=sqrt(objphotCT+skyphot+rn*rn)
+  noisearr=RANDOMN(seed,nfiber,nexp)*nse
 
   ; Recovered flux per fiber is object+sky+noise, minus sky.
   ; Assume that the sky substracted off is known much more accurately than
@@ -609,7 +611,7 @@ for k=0,nwave-1 do begin
      ; but not the noise vector
      else recflux[*,j]=(objphot[*,j]+noisearr[*,j])/exptime[j]/calibmatrix[2,k]
      ; Error vector is just the noise sources
-     var[*,j]=(var[*,j])/exptime[j]/calibmatrix[2,k]
+     nse[*,j]=(nse[*,j])/exptime[j]/calibmatrix[2,k]
      recflux_err[*,j]=(noisearr[*,j])/exptime[j]/calibmatrix[2,k]
   endfor
   ; Flux calibration looks pretty good in tests- output has about
@@ -647,7 +649,7 @@ for k=0,nwave-1 do begin
       ; Adjust flux to different pixel scale
       fluxout[i+j*nfiber]=recflux[i,j];*(pixscaleW/pixscaleO)*(pixscaleW/pixscaleO)
       errout[i+j*nfiber]=recflux_err[i,j];*(pixscaleW/pixscaleO)*(pixscaleW/pixscaleO)
-      varout[i+j*nfiber]=var[i,j];*(pixscaleW/pixscaleO)*(pixscaleW/pixscaleO)
+      ivarout[i+j*nfiber]=1./(nse[i,j]*nse[i,j]);*(pixscaleW/pixscaleO)*(pixscaleW/pixscaleO)
       statout[i+j*nfiber]=fiber_status[i]
     endfor
   endfor
@@ -655,12 +657,16 @@ for k=0,nwave-1 do begin
   ; Interpolate to a regular grid
   ; Empirically, using rlim=1.6'' and sigma=0.7 arcsec gives
   ; the best image quality for CALIFA method thus far.
-  interpimage=mlcalifainterp(xout,yout,fluxout,statout,[XsizeOUT,YsizeOUT],1.6/pixscaleO,0.7/pixscaleO)
+  interpimage=mlcalifainterp_ivar(xout,yout,fluxout,statout,[XsizeOUT,YsizeOUT],1.6/pixscaleO,0.7/pixscaleO,ivarout,ivarimage)
+  FinalCube[*,*,k]=interpimage;*(pixscaleO/pixscaleW)
+  FinalIvarCube[*,*,k]=ivarimage
+
+  ;interpimage=mlcalifainterp(xout,yout,fluxout,statout,[XsizeOUT,YsizeOUT],1.6/pixscaleO,0.7/pixscaleO)
   ; Multiply as necessary to take out scale differences from
   ; working vs output pixel scale
-  FinalCube[*,*,k]=interpimage;*(pixscaleO/pixscaleW)
-  interpimage=mlcalifainterp(xout,yout,varout,statout,[XsizeOUT,YsizeOUT],1.6/pixscaleO,0.7/pixscaleO)
-  FinalErrCube[*,*,k]=interpimage
+  ;FinalCube[*,*,k]=interpimage;*(pixscaleO/pixscaleW)
+  ;interpimage=mlcalifainterp(xout,yout,varout,statout,[XsizeOUT,YsizeOUT],1.6/pixscaleO,0.7/pixscaleO)
+  ;FinalErrCube[*,*,k]=interpimage
 
 endfor
 
@@ -688,7 +694,7 @@ writefits,CCDfile,CCDspec
 writefits,RSSfile,RSS
 writefits,RSSfile_err,RSS_err
 mwrfits,FinalCube,OutpFile,head,/create
-mwrfits,FinalErrCube,OutpFile
+mwrfits,FinalIvarCube,OutpFile
 
 return
 end
